@@ -1,9 +1,6 @@
 // mynewMchacksprj.cpp : Defines the entry point for the console application.
 //
 
-
-
-#include "stdafx.h"
 #include <opencv\cv.h>
 #include <opencv\highgui.h>
 #include <windows.h>
