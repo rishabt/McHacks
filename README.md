@@ -1,4 +1,4 @@
 McHacks
 =======
 
-This is a repository for my project during mchacks
+This is a repository for our (Deepak Sharma and Rishabh Tandon) project during mchacks.
