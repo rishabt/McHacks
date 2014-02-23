@@ -1,8 +1,6 @@
 // mynewMchacksprj.cpp : Defines the entry point for the console application.
 //
 
-
-
 #include "stdafx.h"
 #include <opencv\cv.h>
 #include <opencv\highgui.h>
@@ -11,39 +9,33 @@
 #include <stdlib.h>
 #include <iostream>
 
-
-
 using namespace std;
+
+typedef struct vBall{
+	double lastX;
+	double lastY;
+
+	double lowerH;
+	double lowerS;
+	double lowerV;
+
+	double upperH;
+	double upperS;
+	double upperV;
+ };
 
 //This function threshold the HSV image and create a binary image
 
- class bluered{
-
-	int lastX;
-	int lastY;
-
-	int lowerH;
-	int lowerS;
-	int lowerV;
-
-	int upperH;
-	int upperS;
-	int upperV;
-
-
- public:
-
- IplImage* GetThresholdedImage(IplImage* imgHSV){
+ IplImage* GetThresholdedImage(IplImage* imgHSV, struct vBall strBall){
  
  IplImage* imgThresh=cvCreateImage(cvGetSize(imgHSV),IPL_DEPTH_8U, 1);
- cvInRangeS(imgHSV, cvScalar(this->lowerH,this->lowerS,this->lowerV), cvScalar(this->upperH,this->upperS,this->upperV), imgThresh); 
+ cvInRangeS(imgHSV, cvScalar(strBall.lowerH,strBall.lowerS,strBall.lowerV), cvScalar(strBall.upperH,strBall.upperS,strBall.upperV), imgThresh); 
  
  return imgThresh;
-
 }
 
 
-void trackObject(IplImage* imgThresh, double XY[]){
+static void trackObject(IplImage* imgThresh, double XY[]){
 	
 	double lastXY[] = {0,0};
 	double tmpXY[] = {0.0,0.0,0.0};
@@ -59,23 +51,9 @@ void trackObject(IplImage* imgThresh, double XY[]){
 	tmpXY[1] = moment01/area;
 	tmpXY[2] = area;
 
-	XY = tmpXY;
-		
+	XY = tmpXY;		
 }
 
-bluered(int x, int y , int lH, int lS, int lV, int uH, int uS, int uV){
-
-	int lastX = x;
-	int lastY = y;
-
-	int lowerH=0;
-	int lowerS=144;
-	int lowerV=137;
-
-	int upperH=240;
-	int upperS=244;
-	int upperV=256;
-}
 
 /*void setwindowSettings(bluered* obj){
  cvNamedWindow("Video");
@@ -91,9 +69,10 @@ bluered(int x, int y , int lH, int lS, int lV, int uH, int uS, int uV){
         cvCreateTrackbar("UpperV", "Ball", &upperV, 256, NULL); 
 }*/
 
-
+ 
 int main(){
- CvCapture* capture =0; 
+
+ CvCapture* capture = 0; 
 
  capture = cvCaptureFromCAM(0);
  if(!capture){
@@ -103,9 +82,27 @@ int main(){
 
  IplImage* frame=0;
 
- bluered* blueball = new bluered(0,0,107,232,0,107,256,32);
- bluered* redball = new bluered(0,0,0,147,10,9,256,86);
+ vBall blueBall = vBall();
+ blueBall.lastX=0.0;
+ blueBall.lastY=0.0;
+ blueBall.lowerH=107;
+ blueBall.lowerS=232;
+ blueBall.lowerV=0;
+ blueBall.upperH=151;
+ blueBall.upperS=256;
+ blueBall.upperV=32;
 
+ vBall redBall = vBall();
+ redBall.lastX=0.0;
+ redBall.lastY=0.0;
+ redBall.lowerH=0;
+ redBall.lowerS=147;
+ redBall.lowerV=10;
+ redBall.upperH=9;
+ redBall.upperS=256;
+ redBall.upperV=86;
+ 
+  
  double RED_XY[] = {0,0,0};
  double BLUE_XY[] = {0,0,0};
   
@@ -120,9 +117,9 @@ int main(){
   cvSmooth(frame, frame, CV_GAUSSIAN,3,3);
 
   cvCvtColor(frame, imgHSV, CV_BGR2HSV); //Change the color format from BGR to HSV
-   
-  IplImage* imgThresh_BLUE = blueball->GetThresholdedImage(imgHSV);
-  IplImage* imgThresh_RED = redball->GetThresholdedImage(imgHSV);
+  
+  IplImage* imgThresh_BLUE = GetThresholdedImage(imgHSV,blueBall);
+  IplImage* imgThresh_RED = GetThresholdedImage(imgHSV,redBall);
 
   cvSmooth(imgThresh_BLUE, imgThresh_BLUE, CV_GAUSSIAN,3,3);
   cvSmooth(imgThresh_RED, imgThresh_RED, CV_GAUSSIAN,3,3);
@@ -132,7 +129,7 @@ int main(){
   cvShowImage("Video", frame);
 
   //setwindowSettings();
-  trackObject(imgThresh_BLUE, BLUE_XY);
+  trackObject(imgThresh_BLUE,BLUE_XY);
   trackObject(imgThresh_RED,RED_XY);
 
   if(BLUE_XY[2]>500){
@@ -155,37 +152,8 @@ int main(){
   cvDestroyAllWindows();
   cvReleaseCapture(&capture);
 
-       return 0;
+   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
 
 
 
