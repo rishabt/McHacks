@@ -14,7 +14,7 @@
 using namespace std;
 using namespace cv;
 
-/*typedef struct vBall{
+typedef struct vBall{
 	double lastX;
 	double lastY;
 
@@ -56,7 +56,7 @@ static void trackObject(IplImage* imgThresh, double XY[]){
 }
 
 
-/*void setwindowSettings(bluered* obj){
+void setwindowSettings(bluered* obj){
  cvNamedWindow("Video");
  cvNamedWindow("Ball");
  
@@ -68,7 +68,7 @@ static void trackObject(IplImage* imgThresh, double XY[]){
 
   cvCreateTrackbar("LowerV", "Ball", &lowerV, 256, NULL);
         cvCreateTrackbar("UpperV", "Ball", &upperV, 256, NULL); 
-}*/
+}
 
  
 /*int main(){
@@ -156,11 +156,11 @@ static void trackObject(IplImage* imgThresh, double XY[]){
   cvReleaseCapture(&capture);
 
    return 0;
-}
+}*/
 
-*/
 
-/*Mat getThresholdedImage(Mat img, String color) { 	
+
+Mat getThresholdedImage(Mat img, String color) { 	
 	Mat thresholded_red;
 	Mat thresholded_blue;
 
@@ -238,17 +238,17 @@ int main(){
 
 		// Taking the x and y values and running them throught the exponential
 		// smooting filter, if the if conditional statement is correct
-			/*if ( x >= 0 && y >= 0 )
+			if ( x >= 0 && y >= 0 )
 			{
 				 colorLightBlue.methodUpdate(x,y);
 			}
 			else 
 			{
 				std::cout<< "x & y are equal to zero" << std::endl;
-			}*/
+			}
 		//outputting the colors center coordinates:
 
-		/*cout << x_red << " , " << y_red;
+		cout << x_red << " , " << y_red;
 		cout << x_blue << " , " << y_blue;
 
 		// Draw a circle at the center of the red color
@@ -265,21 +265,21 @@ int main(){
 
 		SetCursorPos(x_red,y_red);
 
-		/*if(y_red <= y_blue){
+		if(y_red <= y_blue){
 			mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 		}
 
 		else{
 			mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-		}*/
+		}
 
 
 
-/*	} while (waitKey(10) < 0); // waitkey returns -1 if no key pressed and a positive value if pressed
+	} while (waitKey(10) < 0); // waitkey returns -1 if no key pressed and a positive value if pressed
 
 	return 0;
 }
-*/
+
 
 
 
